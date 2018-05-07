@@ -26,15 +26,16 @@ services:
     # Add setting to allow fuse mounts inside container, plus allow
     # the creation of NICs internally.
     cap_add:
+      - SYS_ADMIN
       - NET_ADMIN
-    # devices:
-    #   - /dev/net
+    devices:
+      - /dev/fuse
     # TODO: Used to let containers use mount for fuse support. AppArmor profile used
     # prevents such things, even if other capabilities and devices were added. To
     # overcome that, all AppArmor confinement is removed (no bueno!) but it works
     # In the future consider loading a profile with only required access enabled.
-    # security_opt:
-    #   - apparmor:unconfined
+    security_opt:
+      - apparmor:unconfined
 
     # Connects container to bridge offered in Docker's host. Leaving this undefined
     # tell docker compose to create a new isolated network, and connect container
@@ -73,6 +74,9 @@ services:
         read_only: true
 
     # Expose ports to made the service available on host end.
+    # Configured based on how systemd-resolve works in systemd systems. For this to work, provided
+    # systemd-resolved DNS stub must be disabled (DNSStubListener=no in /etc/systemd/resolved.conf,
+    # for Ubuntu systems). Variables provided for customization for different OS.
     ports:
       - "${DnsHostIp:-127.0.0.53}:${DnsHostPort:-53}:${DnsContainerPort:-53}/udp"
       - "${DnsHostIp:-127.0.0.53}:${DnsHostPort:-53}:${DnsContainerPort:-53}/tcp"
