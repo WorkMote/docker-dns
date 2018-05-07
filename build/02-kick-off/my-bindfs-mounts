@@ -1,0 +1,16 @@
+# In this file you have to include as many lines to start a fuse.bindfs as you want
+# This are passed as is to the command 'bindfs', so be careful with what you put
+#
+# NOTE: Origin and Destination places must exist, You have to create them, the process
+# won't do that
+
+
+################################################################
+#### EVERY ENTRY MUST BE A VALID -->bindfs<-- COMMAND ENTRY ####
+################################################################
+
+# Dns Folder, to serve files and folders for the dns service.
+-o nonempty -u www-data -g www-data --create-for-user=${DnsVolumeHostUid:-${VolumeHostUid}} --create-for-group=${DnsVolumeHostGid:-${VolumeHostGid}} --chmod-ignore --chmod-allow-x "/data/" "/tmp/"
+
+# Dns Folder, to serve files and folders for the new user created inside the container.
+-o nonempty -u "`cat /opt/custom-user-name`" -g "`cat /opt/custom-user-name`" --create-for-user=${DnsVolumeHostUid:-${VolumeHostUid}} --create-for-group=${DnsVolumeHostGid:-${VolumeHostGid}} --chmod-ignore --chmod-allow-x "/data/" "`getent passwd "$(cat /opt/custom-user-name)" | cut -d: -f6`/${DnsAccessFolderName:-${AccessFolderName}}/"

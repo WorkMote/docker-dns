@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# # Create the inner user access point for the volume so it can see it as own.
+# Username="`cat /opt/custom-user-name`"
+# Homedir=$(getent passwd "$Username" | cut -d: -f6)
+# if [ ! -d "$Homedir/${DnsAccessFolderName:-${AccessFolderName}}" ]; then
+#   mkdir -p "$Homedir/${DnsAccessFolderName:-${AccessFolderName}}"
+# fi;
+
+# # Fix perms.
+# chown "$Username.$Username" "$Homedir/${DnsAccessFolderName:-${AccessFolderName}}"
+
+# # Keep looping until 'apply-shell-expansion' is available
+# while [ -z `which apply-shell-expansion` ];
+#   do sleep 1;
+# done;
+
+# # Initialize my-bindfs-mounts config file with currently set info.
+# # For some reason overrding same file causes it to be blank, that's the reason
+# # for all the trickery.
+# /snap/bin/apply-shell-expansion /etc/default/my-bindfs-mounts > /tmp/my-bindfs-mounts
+# mv -f /tmp/my-bindfs-mounts /etc/default/my-bindfs-mounts
+
+# # Keep looping until 'my-bindfs-mounts' is available
+# while [ -z `which my-bindfs-mounts` ]; 
+#   do sleep 1;
+# done; 
+
+# # Set bindfs mounts as defined in config file
+# /snap/bin/my-bindfs-mounts --load-from-file
+
+# Tell the world this is done
+# NOTE: Improve this by using locks or some sort of magic, so no other process will be able
+# to alter this file
+touch /tmp/kick-off

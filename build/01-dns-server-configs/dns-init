@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Keep looping until kick off reports its job is complete.
+while [ ! -f /tmp/kick-off ];
+  do sleep 1;
+done;
+
+# Set some default forwarders.
+export ProcessedDnsForwarders=
+read -r -d '' ProcessedDnsForwarders <<'FORWARDERS'
+# Cloudfare Public DNS
+server=1.1.1.1
+server=1.0.0.1
+
+# Google Public DNS
+server=8.8.8.8
+server=8.8.4.4
+FORWARDERS
+
+# Process forwarders to add to system.
+if [ -n "${DnsForwarders}" ]; then
+  # Empty processed forwarders var.
+  ProcessedDnsForwarders=
+
+  # Load newly passed forwarders.
+  for ip in $(echo ${DnsForwarders} | sed "s/,/ /g"); do
+    if [ -n "$ProcessedDnsForwarders" ]; then
+      ProcessedDnsForwarders+=$'\n'
+    fi
+    ProcessedDnsForwarders+="server=${ip}"
+  done
+fi
+
+# Keep looping until 'apply-shell-expansion' is available
+while [ -z `which apply-shell-expansion` ];
+  do sleep 1;
+done;
+
+# Update dnsmasq base config file to make it use processed forwarders.
+# For some reason overrding same file causes it to be blank, that's the reason
+# for all the trickery.
+/snap/bin/apply-shell-expansion /etc/dnsmasq.d/00-base-dnsmasq.conf > /tmp/00-base-dnsmasq.conf
+mv -f /tmp/00-base-dnsmasq.conf /etc/dnsmasq.d/00-base-dnsmasq.conf
+
+# Start the server
+exec dnsmasq -C /etc/dnsmasq.conf --no-daemon 2>&1 | tee -a "/var/log/dnsmasq.log"
