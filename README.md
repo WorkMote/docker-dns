@@ -8,4 +8,4 @@ This image provides a DNS solution to be implemented in any system to serve seve
 
 - Provide a local DNS so internal name queries can be offered.
 - Forwarding to custom external DNS, in case external name resolution is required.
-- Automatic name setup for containers running, so they can be accessed by name instead of ip
+- Automatic name setup for containers running, so they can be accessed by name instead of ip.

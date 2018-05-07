@@ -5,6 +5,7 @@ apps/*
 configs/*
 !configs/configs.env.base
 !configs/scripts/
+configs/scripts/*
 
 data/*
 
