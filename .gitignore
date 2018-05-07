@@ -9,6 +9,8 @@ configs/*
 data/*
 
 secrets/*
+!secrets/scripts
+secrets/scripts/*
 
 !**/README*
 !**/LICENSE
