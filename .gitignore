@@ -1,14 +1,14 @@
-!**/README*
-!**/LICENSE
-
 apps/*
 !apps/.env
 !apps/.init
 
 configs/*
-configs/scripts/*
 !configs/configs.env.base
+configs/scripts/*
 
 data/*
 
 secrets/*
+
+!**/README*
+!**/LICENSE
